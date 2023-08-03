@@ -54,6 +54,7 @@ def button_event():
 
 def loginCache(GetEntries):
     if not os.path.exists("./ApiCache/Login.txt"):
+        os.mkdir("./ApiCache")
         entriesFile = open("./ApiCache/Login.txt", "w")
         entriesFile.write(str(GetEntries))
         entriesFile.close()
