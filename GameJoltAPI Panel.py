@@ -1,6 +1,5 @@
 import sys
 sys.path.insert(1, './Modules')
-import ast
 import py_gjapi
 import tkinter
 import customtkinter  # <- import the CustomTkinter module
@@ -56,11 +55,13 @@ def loginCache(GetEntries):
     if not os.path.exists("./ApiCache/Login.txt"):
         os.mkdir("./ApiCache")
         entriesFile = open("./ApiCache/Login.txt", "w")
-        entriesFile.write(str(GetEntries))
+        #entriesFile.write(str(GetEntries))
+        for E in GetEntries:
+            entriesFile.write(f"{E},")
         entriesFile.close()
     else:
         entriesFile = open("./ApiCache/Login.txt", "r")
-        GetEntries = ast.literal_eval(entriesFile.read())  # преобразование строки в список
+        GetEntries = entriesFile.readline().split(",")  # преобразование строки в список
         uEContent.set(value=GetEntries[0])
         tEContent.set(value=GetEntries[1])
         gIDContent.set(value=GetEntries[2])
@@ -91,7 +92,7 @@ privateKeyEntry.grid(row = 5, pady = 10)
 
 def mainPanel(GetEntries):
     gjt=GameJoltTrophy(GetEntries[0], GetEntries[1], GetEntries[2], GetEntries[3])
-    
+    print(gjt.fetchUserInfo())
     if not os.path.exists("./ApiCache/" + GetEntries[0] + "'s pfp.jpg"):
         pfp = requests.get(gjt.fetchUserInfo()["users"][0]["avatar_url"],stream=True)
         pfpFile = open("./ApiCache/"+GetEntries[0]+"'s pfp.jpg", "wb")
